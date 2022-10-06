@@ -1,11 +1,13 @@
 package solver
 
-func max(values ...int) int {
-	max := values[0]
-	for _, v := range values {
-		if v > max {
-			max = v
-		}
+import "github.com/franciscobonand/sequence-alignment/matrix"
+
+func max(diag, left, top int) *matrix.Cell {
+	if diag >= left && diag >= top {
+		return &matrix.Cell{Value: diag, From: matrix.Diagonal}
 	}
-	return max
+	if left >= top {
+		return &matrix.Cell{Value: left, From: matrix.Left}
+	}
+	return &matrix.Cell{Value: top, From: matrix.Top}
 }

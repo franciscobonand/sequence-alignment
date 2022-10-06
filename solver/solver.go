@@ -19,20 +19,19 @@ func NewAlignmentSolver(s score.Evaluation, seq1, seq2 string) AlignmentSolver {
 }
 
 func (as AlignmentSolver) Solve(seq1, seq2 string) error {
-	var err error
-
 	for x := 1; x < len(as.m); x++ {
 		for y := 1; y < len(as.m[x]); y++ {
-			as.m[x][y].Value, err = as.calculateCell(x, y)
+			cell, err := as.calculateCell(x, y)
 			if err != nil {
 				return fmt.Errorf("error on cell %d %d: %v", x, y, err)
 			}
+			as.m[x][y] = *cell
 		}
 	}
 	return nil
 }
 
-func (as AlignmentSolver) PrintResult() {
+func (as AlignmentSolver) PrintResultMatrix() {
 	for i, line := range as.m {
 		if i == 0 {
 			fmt.Print("    ")
@@ -54,21 +53,64 @@ func (as AlignmentSolver) PrintResult() {
 	}
 }
 
-func (as AlignmentSolver) calculateCell(x, y int) (int, error) {
+func (as AlignmentSolver) PrintResult() {
+	var seq1, seq2 string
+	currCell := as.m[len(as.m)-1][len(as.m[0])-1]
+
+	for {
+		if currCell.From == matrix.Diagonal {
+			seq1 = string(as.seq1[currCell.Y-1]) + seq1
+			seq2 = string(as.seq2[currCell.X-1]) + seq2
+			currCell = as.m[currCell.X-1][currCell.Y-1]
+		} else if currCell.From == matrix.Left {
+			seq1 = string(as.seq1[currCell.Y-1]) + seq1
+			seq2 = "-" + seq2
+			currCell = as.m[currCell.X][currCell.Y-1]
+		} else if currCell.From == matrix.Top {
+			seq1 = "-" + seq1
+			seq2 = string(as.seq2[currCell.X-1]) + seq2
+			currCell = as.m[currCell.X-1][currCell.Y]
+		} else {
+			break
+		}
+	}
+
+	fmt.Println(seq1)
+	fmt.Println(seq2)
+}
+
+func (as AlignmentSolver) PrintResultMatrixDebug() {
+	for i, line := range as.m {
+		if i == 0 {
+			fmt.Print("     ")
+			for _, s := range as.seq1 {
+				fmt.Printf("%c ", s)
+			}
+			fmt.Println("\n ", line)
+			continue
+		}
+		fmt.Println(string(as.seq2[i-1]), line)
+	}
+}
+
+func (as AlignmentSolver) calculateCell(x, y int) (*matrix.Cell, error) {
 	diagonal, err := as.getDiagonalValue(x, y)
 	if err != nil {
-		return 0, err
+		return nil, err
 	}
 	left, err := as.getLeftValue(x, y)
 	if err != nil {
-		return 0, err
+		return nil, err
 	}
 	top, err := as.getTopValue(x, y)
 	if err != nil {
-		return 0, err
+		return nil, err
 	}
 
-	return max(diagonal, left, top), nil
+	cell := max(diagonal, left, top)
+	cell.X = x
+	cell.Y = y
+	return cell, nil
 }
 
 func (as AlignmentSolver) getDiagonalValue(x, y int) (int, error) {

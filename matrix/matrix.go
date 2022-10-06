@@ -2,9 +2,18 @@ package matrix
 
 type Matrix [][]Cell
 
+type Direction string
+
+const (
+	Left     Direction = "Left"
+	Top      Direction = "Top"
+	Diagonal Direction = "Diag"
+)
+
 type Cell struct {
 	Value int
-	From  string
+	From  Direction
+	X, Y  int
 }
 
 func New(seq1, seq2 string) Matrix {

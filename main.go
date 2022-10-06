@@ -8,12 +8,12 @@ import (
 )
 
 func main() {
-
 	s := score.NewSimpleScore()
 	as := solver.NewAlignmentSolver(s, "ATCGTAC", "ATGTTAT")
 	err := as.Solve("ATCGTAC", "ATGTTAT")
 	if err != nil {
 		log.Fatalf("error solving alignment: %v", err)
 	}
+	as.PrintResultMatrix()
 	as.PrintResult()
 }
