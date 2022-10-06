@@ -23,7 +23,7 @@ func (as AlignmentSolver) Solve(seq1, seq2 string) error {
 
 	for x := 1; x < len(as.m); x++ {
 		for y := 1; y < len(as.m[x]); y++ {
-			as.m[x][y], err = as.calculateCell(x, y)
+			as.m[x][y].Value, err = as.calculateCell(x, y)
 			if err != nil {
 				return fmt.Errorf("error on cell %d %d: %v", x, y, err)
 			}
@@ -35,14 +35,22 @@ func (as AlignmentSolver) Solve(seq1, seq2 string) error {
 func (as AlignmentSolver) PrintResult() {
 	for i, line := range as.m {
 		if i == 0 {
-			fmt.Print("     ")
+			fmt.Print("    ")
 			for _, s := range as.seq1 {
 				fmt.Printf("%c ", s)
 			}
-			fmt.Println("\n ", line)
+			fmt.Print("\n  ")
+			for _, cell := range line {
+				fmt.Printf("%d ", cell.Value)
+			}
+			fmt.Println()
 			continue
 		}
-		fmt.Println(string(as.seq2[i-1]), line)
+		fmt.Printf("%s ", string(as.seq2[i-1]))
+		for _, cell := range line {
+			fmt.Printf("%d ", cell.Value)
+		}
+		fmt.Println()
 	}
 }
 
@@ -69,10 +77,10 @@ func (as AlignmentSolver) getDiagonalValue(x, y int) (int, error) {
 	}
 
 	if as.seq1[y-1] == as.seq2[x-1] {
-		return as.m[x-1][y-1] + as.s.Match(), nil
+		return as.m[x-1][y-1].Value + as.s.Match(), nil
 	}
 
-	return as.m[x-1][y-1], nil
+	return as.m[x-1][y-1].Value + as.s.Mismatch(), nil
 }
 
 func (as AlignmentSolver) getLeftValue(x, y int) (int, error) {
@@ -80,7 +88,7 @@ func (as AlignmentSolver) getLeftValue(x, y int) (int, error) {
 		return 0, fmt.Errorf("index x=%d out of range", x)
 	}
 
-	return as.m[x][y-1] + as.s.Gap(), nil
+	return as.m[x][y-1].Value + as.s.Gap(), nil
 }
 
 func (as AlignmentSolver) getTopValue(x, y int) (int, error) {
@@ -88,5 +96,5 @@ func (as AlignmentSolver) getTopValue(x, y int) (int, error) {
 		return 0, fmt.Errorf("index y=%d out of range", y)
 	}
 
-	return as.m[x-1][y] + as.s.Gap(), nil
+	return as.m[x-1][y].Value + as.s.Gap(), nil
 }

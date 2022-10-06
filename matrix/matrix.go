@@ -1,6 +1,11 @@
 package matrix
 
-type Matrix [][]int
+type Matrix [][]Cell
+
+type Cell struct {
+	Value int
+	From  string
+}
 
 func New(seq1, seq2 string) Matrix {
 	matrix := generateZeroMatrix(len(seq1), len(seq2))
@@ -8,10 +13,10 @@ func New(seq1, seq2 string) Matrix {
 }
 
 func generateZeroMatrix(lines, cols int) Matrix {
-	matrix := make([][]int, lines+1)
+	matrix := make([][]Cell, lines+1)
 
 	for i := range matrix {
-		matrix[i] = make([]int, cols+1)
+		matrix[i] = make([]Cell, cols+1)
 	}
 
 	return matrix
