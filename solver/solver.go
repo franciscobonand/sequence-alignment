@@ -14,11 +14,11 @@ type AlignmentSolver struct {
 }
 
 func NewAlignmentSolver(s score.Evaluation, seq1, seq2 string) AlignmentSolver {
-	m := matrix.New("ATCGTAC", "ATGTTAT")
+	m := matrix.New(len(seq1), len(seq2))
 	return AlignmentSolver{m: m, s: s, seq1: seq1, seq2: seq2}
 }
 
-func (as AlignmentSolver) Solve(seq1, seq2 string) error {
+func (as AlignmentSolver) Solve() error {
 	for x := 1; x < len(as.m); x++ {
 		for y := 1; y < len(as.m[x]); y++ {
 			cell, err := as.calculateCell(x, y)
@@ -118,11 +118,12 @@ func (as AlignmentSolver) getDiagonalValue(x, y int) (int, error) {
 		return 0, fmt.Errorf("index x=%d or y=%d out of range", x, y)
 	}
 
+	// TODO: Make it work for different size sequences
 	if as.seq1[y-1] == as.seq2[x-1] {
-		return as.m[x-1][y-1].Value + as.s.Match(), nil
+		return as.m[x-1][y-1].Value + as.s.Match(string(as.seq1[y-1]), string(as.seq2[x-1])), nil
 	}
 
-	return as.m[x-1][y-1].Value + as.s.Mismatch(), nil
+	return as.m[x-1][y-1].Value + as.s.Mismatch(string(as.seq1[y-1]), string(as.seq2[x-1])), nil
 }
 
 func (as AlignmentSolver) getLeftValue(x, y int) (int, error) {

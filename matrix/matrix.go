@@ -16,8 +16,8 @@ type Cell struct {
 	X, Y  int
 }
 
-func New(seq1, seq2 string) Matrix {
-	matrix := generateZeroMatrix(len(seq1), len(seq2))
+func New(lines, cols int) Matrix {
+	matrix := generateZeroMatrix(lines, cols)
 	return matrix
 }
 

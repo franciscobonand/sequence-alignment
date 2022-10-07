@@ -8,9 +8,10 @@ import (
 )
 
 func main() {
-	s := score.NewSimpleScore()
-	as := solver.NewAlignmentSolver(s, "ATCGTAC", "ATGTTAT")
-	err := as.Solve("ATCGTAC", "ATGTTAT")
+	// s := score.NewSimpleScore(1, 0, 0)
+	s := score.NewNeedlemanWunschScore(0)
+	as := solver.NewAlignmentSolver(s, "DRQT", "DRNTA")
+	err := as.Solve()
 	if err != nil {
 		log.Fatalf("error solving alignment: %v", err)
 	}
