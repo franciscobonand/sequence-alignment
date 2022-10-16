@@ -7,17 +7,20 @@ import (
 	"github.com/franciscobonand/sequence-alignment/score"
 )
 
+// AlignmentSolver defines a solver's structure for the alignment problem
 type AlignmentSolver struct {
 	m          matrix.Matrix
 	s          score.Evaluation
 	seq1, seq2 string
 }
 
+// NewAlignmentSolver creates a new solver for the alignment problem
 func NewAlignmentSolver(s score.Evaluation, seq1, seq2 string) AlignmentSolver {
 	m := matrix.New(len(seq1), len(seq2))
 	return AlignmentSolver{m: m, s: s, seq1: seq1, seq2: seq2}
 }
 
+// Solve solves the alignment problem
 func (as AlignmentSolver) Solve() error {
 	for x := 1; x < len(as.m); x++ {
 		for y := 1; y < len(as.m[x]); y++ {
@@ -31,6 +34,7 @@ func (as AlignmentSolver) Solve() error {
 	return nil
 }
 
+// PrintResultMatrix prints the result matrix
 func (as AlignmentSolver) PrintResultMatrix() {
 	for i, line := range as.m {
 		if i == 0 {
@@ -53,6 +57,7 @@ func (as AlignmentSolver) PrintResultMatrix() {
 	}
 }
 
+// PrintResult prints the result of the alignment
 func (as AlignmentSolver) PrintResult() {
 	var seq1, seq2 string
 	currCell := as.m[len(as.m)-1][len(as.m[0])-1]
@@ -79,6 +84,7 @@ func (as AlignmentSolver) PrintResult() {
 	fmt.Println(seq2)
 }
 
+// PrintResultMatrixDebug prints the result matrix with each matrix cell's full information
 func (as AlignmentSolver) PrintResultMatrixDebug() {
 	for i, line := range as.m {
 		if i == 0 {

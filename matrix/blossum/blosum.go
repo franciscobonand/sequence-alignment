@@ -1,5 +1,6 @@
 package blosum
 
+// Blosum62 is the BLOSUM62 matrix
 var Blosum62 = map[string]map[string]int{
 	"A": {
 		"A": 4,
