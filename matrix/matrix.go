@@ -22,10 +22,10 @@ func New(lines, cols int) Matrix {
 }
 
 func generateZeroMatrix(lines, cols int) Matrix {
-	matrix := make([][]Cell, lines+1)
+	matrix := make([][]Cell, cols+1)
 
 	for i := range matrix {
-		matrix[i] = make([]Cell, cols+1)
+		matrix[i] = make([]Cell, lines+1)
 	}
 
 	return matrix

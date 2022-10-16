@@ -10,7 +10,7 @@ import (
 func main() {
 	// s := score.NewSimpleScore(1, 0, 0)
 	s := score.NewNeedlemanWunschScore(0)
-	as := solver.NewAlignmentSolver(s, "DRQT", "DRNTA")
+	as := solver.NewAlignmentSolver(s, "DRQTAQAAGTTTIT", "DRNTAQLLGTDTT")
 	err := as.Solve()
 	if err != nil {
 		log.Fatalf("error solving alignment: %v", err)
