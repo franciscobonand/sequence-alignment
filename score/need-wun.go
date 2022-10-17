@@ -2,18 +2,18 @@ package score
 
 import blosum "github.com/franciscobonand/sequence-alignment/matrix/blossum"
 
-// NeedlemanWunschScore defines a score for the Needleman-Wunsch algorithm
-type NeedlemanWunschScore struct {
+// Blosum62Score defines a score for the Needleman-Wunsch algorithm
+type Blosum62Score struct {
 	gap int
 }
 
-// NewNeedlemanWunschScore creates a new NeedlemanWunschScore instance
-func NewNeedlemanWunschScore(gap int) *NeedlemanWunschScore {
-	return &NeedlemanWunschScore{gap}
+// NewBlosum62Score creates a new Blosum62Score instance
+func NewBlosum62Score(gap int) *Blosum62Score {
+	return &Blosum62Score{gap}
 }
 
 // Match returns the match value
-func (s *NeedlemanWunschScore) Match(seq1, seq2 string) int {
+func (s *Blosum62Score) Match(seq1, seq2 string) int {
 	if val, ok := blosum.Blosum62[seq1][seq2]; ok {
 		return val
 	}
@@ -21,7 +21,7 @@ func (s *NeedlemanWunschScore) Match(seq1, seq2 string) int {
 }
 
 // Mismatch returns the mismatch value
-func (s *NeedlemanWunschScore) Mismatch(seq1, seq2 string) int {
+func (s *Blosum62Score) Mismatch(seq1, seq2 string) int {
 	if val, ok := blosum.Blosum62[seq1][seq2]; ok {
 		return val
 	}
@@ -29,6 +29,6 @@ func (s *NeedlemanWunschScore) Mismatch(seq1, seq2 string) int {
 }
 
 // Gap returns the gap value
-func (s *NeedlemanWunschScore) Gap() int {
+func (s *Blosum62Score) Gap() int {
 	return s.gap
 }
